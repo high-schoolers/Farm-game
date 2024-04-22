@@ -6,7 +6,7 @@ inventaire = {"herbe" : 10}
 
 global dico_animaux
 dico_animaux = {"vache" : ("lait",2), "poule" : ("oeuf",3),
-                "mouton" : ("laine",3)}
+                "mouton" : ("laine",4), "abeille" : ("miel",8)}
 
 pygame.init()
 largeur = pygame.display.Info().current_w
@@ -21,6 +21,10 @@ img_poule2 = pygame.image.load("poule_oeuf.png").convert_alpha()
 img_enclos = pygame.image.load("enclos.png").convert_alpha()
 img_vache = pygame.image.load("vache.png").convert_alpha()
 img_vache2 = pygame.image.load("vache_lait.png").convert_alpha()
+img_mouton = pygame.image.load("mouton.png").convert_alpha()
+img_mouton2 = pygame.image.load("mouton_laine.png").convert_alpha() 
+img_ruche = pygame.image.load("ruche.png").convert_alpha()
+img_ruche2 = pygame.image.load("ruche_miel.png").convert_alpha() 
 
 class Animaux(pygame.sprite.Sprite):
     def __init__(self,nom,img,img2,centre,etat = 0):
@@ -76,24 +80,35 @@ class Animaux(pygame.sprite.Sprite):
                 inventaire[self.produit] = 1
             print(self.produit,"récupéré !")
             self.etat = 0
-            ecran.fill((255,255,255),self.rect)
+            if self.nom == "abeille" :
+                ecran.fill((68, 189, 32),self.rect)
+            else :
+                ecran.fill((255,255,255),self.rect)
             self.image = self.img1
             self.rect = self.image.get_rect()
             self.rect.center = self.centre
         else :
             print("Pas de produit à récupérer")
 
-ecran.blit(img_enclos,(50,50))
-ecran.blit(img_enclos,(50,200))
-ecran.blit(img_enclos,(50,350))
+ecran.blit(img_enclos,(25,25))
+ecran.blit(img_enclos,(25,225))
+ecran.blit(img_enclos,(25,425))
 
 all_sprites = pygame.sprite.Group()
 p1 = Animaux("poule",img_poule,img_poule2,(100,100))
 p2 = Animaux("poule",img_poule,img_poule2,(150,150))
-v1 = Animaux("vache",img_vache,img_vache2,(125,275))
-all_sprites.add(p1)
-all_sprites.add(p2)
-all_sprites.add(v1)
+
+v1 = Animaux("vache",img_vache,img_vache2,(165,285))
+v2 = Animaux("vache",img_vache,img_vache2,(85,350))
+
+m1 = Animaux("mouton",img_mouton,img_mouton2,(75,475))
+m2 = Animaux("mouton",img_mouton,img_mouton2,(175,500))
+m3 = Animaux("mouton",img_mouton,img_mouton2,(75,550))
+
+a1 = Animaux("abeille",img_ruche,img_ruche2,(300,75))
+a2 = Animaux("abeille",img_ruche,img_ruche2,(300,175))
+
+all_sprites.add(p1,p2,v1,v2,m1,m2,m3,a1,a2)
 all_sprites.draw(ecran)
 pygame.display.flip()
 
