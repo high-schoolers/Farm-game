@@ -6,7 +6,8 @@ inventaire = {"herbe" : 10}
 
 global dico_animaux
 dico_animaux = {"vache" : ("lait",2), "poule" : ("oeuf",3),
-                "mouton" : ("laine",4), "abeille" : ("miel",8)}
+                "mouton" : ("laine",4), "abeille" : ("miel",8),
+                "chevre" : ("lait chevre",3)}
 
 pygame.init()
 largeur = pygame.display.Info().current_w
@@ -25,6 +26,8 @@ img_mouton = pygame.image.load("mouton.png").convert_alpha()
 img_mouton2 = pygame.image.load("mouton_laine.png").convert_alpha() 
 img_ruche = pygame.image.load("ruche.png").convert_alpha()
 img_ruche2 = pygame.image.load("ruche_miel.png").convert_alpha() 
+img_chevre = pygame.image.load("chevre.png").convert_alpha()
+img_chevre2 = pygame.image.load("chevre_lait.png").convert_alpha()
 
 class Animaux(pygame.sprite.Sprite):
     def __init__(self,nom,img,img2,centre,etat = 0):
@@ -93,10 +96,13 @@ class Animaux(pygame.sprite.Sprite):
 ecran.blit(img_enclos,(25,25))
 ecran.blit(img_enclos,(25,225))
 ecran.blit(img_enclos,(25,425))
+ecran.blit(img_enclos,(250,225))
 
 all_sprites = pygame.sprite.Group()
-p1 = Animaux("poule",img_poule,img_poule2,(100,100))
-p2 = Animaux("poule",img_poule,img_poule2,(150,150))
+p1 = Animaux("poule",img_poule,img_poule2,(80,80))
+p2 = Animaux("poule",img_poule,img_poule2,(175,160))
+p3 = Animaux("poule",img_poule,img_poule2,(80,160))
+p4 = Animaux("poule",img_poule,img_poule2,(175,80))
 
 v1 = Animaux("vache",img_vache,img_vache2,(165,285))
 v2 = Animaux("vache",img_vache,img_vache2,(85,350))
@@ -108,7 +114,9 @@ m3 = Animaux("mouton",img_mouton,img_mouton2,(75,550))
 a1 = Animaux("abeille",img_ruche,img_ruche2,(300,75))
 a2 = Animaux("abeille",img_ruche,img_ruche2,(300,175))
 
-all_sprites.add(p1,p2,v1,v2,m1,m2,m3,a1,a2)
+c1 = Animaux("chevre",img_chevre,img_chevre2,(300,275))
+
+all_sprites.add(p1,p2,p3,p4,v1,v2,m1,m2,m3,a1,a2,c1)
 all_sprites.draw(ecran)
 pygame.display.flip()
 
