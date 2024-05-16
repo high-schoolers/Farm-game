@@ -2,12 +2,12 @@ from time import *
 import pygame
 
 global inventaire
-inventaire = {"herbe" : 10}
+inventaire = {"herbe" : 10, "argent" : 200}
 
 global dico_animaux
 dico_animaux = {"vache" : ("lait",2), "poule" : ("oeuf",3),
                 "mouton" : ("laine",4), "abeille" : ("miel",8),
-                "chevre" : ("lait chevre",3)}
+                "chevre" : ("lait_chevre",3), "pommier" : ("pomme",2)}
 
 pygame.init()
 largeur = pygame.display.Info().current_w
@@ -17,9 +17,11 @@ ecran = pygame.display.set_mode([largeur,hauteur-60])
 pygame.display.set_caption("jour du foin") 
 ecran.fill((68, 189, 32))
 pygame.display.flip()
+img_enclos = pygame.image.load("enclos.png").convert_alpha()
+img_crayon = pygame.image.load("crayon.png").convert_alpha()
+img_crayon = pygame.transform.scale(img_crayon,(25,25))
 img_poule = pygame.image.load("poule.png").convert_alpha()
 img_poule2 = pygame.image.load("poule_oeuf.png").convert_alpha()
-img_enclos = pygame.image.load("enclos.png").convert_alpha()
 img_vache = pygame.image.load("vache.png").convert_alpha()
 img_vache2 = pygame.image.load("vache_lait.png").convert_alpha()
 img_mouton = pygame.image.load("mouton.png").convert_alpha()
@@ -28,6 +30,11 @@ img_ruche = pygame.image.load("ruche.png").convert_alpha()
 img_ruche2 = pygame.image.load("ruche_miel.png").convert_alpha() 
 img_chevre = pygame.image.load("chevre.png").convert_alpha()
 img_chevre2 = pygame.image.load("chevre_lait.png").convert_alpha()
+
+img_arbre = pygame.image.load("arbre.png").convert_alpha()
+img_pommier = pygame.image.load("pommier.png").convert_alpha()
+
+#img_pommier = pygame.transform.scale(img_pommier,(175,175))
 
 class Animaux(pygame.sprite.Sprite):
     def __init__(self,nom,img,img2,centre,etat = 0):
@@ -43,7 +50,7 @@ class Animaux(pygame.sprite.Sprite):
         self.image = img
         self.rect = self.image.get_rect()
         self.rect.center = centre
-        self.velocity = 5
+        #self.velocity = 5
 
     def update(self,events):
         for event in events :
@@ -53,6 +60,10 @@ class Animaux(pygame.sprite.Sprite):
                         self.produire()
                     elif self.etat == 2 :
                         self.recuperer()
+                        
+    def deplacer(self):
+        pass
+
         
     def produire(self):
         if self.etat == 0 :
@@ -83,7 +94,7 @@ class Animaux(pygame.sprite.Sprite):
                 inventaire[self.produit] = 1
             print(self.produit,"récupéré !")
             self.etat = 0
-            if self.nom == "abeille" :
+            if self.nom == "abeille" or self.nom == "pommier":
                 ecran.fill((68, 189, 32),self.rect)
             else :
                 ecran.fill((255,255,255),self.rect)
@@ -93,10 +104,18 @@ class Animaux(pygame.sprite.Sprite):
         else :
             print("Pas de produit à récupérer")
 
+def modifier(sprites):
+    events = pygame.event.get()
+    for event in events :
+        if event.type == pygame.MOUSEBUTTONDOWN :
+            if sprite.rect.collidepoint(event.pos):
+                rect.move_ip(event.rel)
+
 ecran.blit(img_enclos,(25,25))
 ecran.blit(img_enclos,(25,225))
 ecran.blit(img_enclos,(25,425))
 ecran.blit(img_enclos,(250,225))
+ecran.blit(img_crayon,(25,615))
 
 all_sprites = pygame.sprite.Group()
 p1 = Animaux("poule",img_poule,img_poule2,(80,80))
@@ -116,7 +135,9 @@ a2 = Animaux("abeille",img_ruche,img_ruche2,(300,175))
 
 c1 = Animaux("chevre",img_chevre,img_chevre2,(300,275))
 
-all_sprites.add(p1,p2,p3,p4,v1,v2,m1,m2,m3,a1,a2,c1)
+pommier1 = Animaux("pommier",img_arbre,img_pommier,(410,120))
+
+all_sprites.add(p1,p2,p3,p4,v1,v2,m1,m2,m3,a1,a2,c1,pommier1)
 all_sprites.draw(ecran)
 pygame.display.flip()
 
@@ -137,6 +158,22 @@ while running :
             # si on appuie sur la touche echap
             pygame.quit()
             running = False
+        """
+        elif event.type == pygame.MOUSEBUTTONDOWN :
+            position = pygame.mouse.get_pos()
+            rect = img_crayon.get_rect()
+            if rect.x <= position[0] <= rect.x+rect.width:
+                print("oui")
+                if rect.y <= position[1] <= rect.y+rect.height:
+                    print("Mode modification")
+                    modifier(all_sprites)
+                else :
+                    print("non")
+            
+            if img_crayon.get_rect().collidepoint(event.pos):
+                print("Mode modification")
+                modifier(all_sprites)
+        """
 
     all_sprites.update(events)
     all_sprites.draw(ecran)
