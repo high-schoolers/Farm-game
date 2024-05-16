@@ -24,6 +24,7 @@ dico_animaux = {
     "mouton" : ("laine",5),
     "abeille" : ("miel",8),
     "chevre" : ("lait_chevre",5)
+    "pommier" : ('pomme",5)
     }
 
 class Produit:
@@ -105,12 +106,14 @@ beurre = Produit('beurre', 'lait', 1)
 pull = Produit('pull', 'laine', 3)
 bonbons = Produit('bonbons', 'miel', 2)
 fromage_chevre = Produit('fromage_chevre', 'lait_chevre', 2)
+jus_pomme = Produit('jus_pomme', 'pomme', 4)
 
 vache = Animaux('vache')
 poule = Animaux('poule')
 mouton = Animaux('mouton')
 abeille = Animaux('abeille')
 chevre = Animaux('chevre')
+pom = Animaux('pommier')
 
 champ1 = Champ()
 champ2 = Champ()
